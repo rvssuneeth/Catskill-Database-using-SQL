@@ -1,0 +1,333 @@
+/* Create TECHNOLOGY*/
+
+CREATE TABLE TECHNOLOGY (
+TechID		Int              NOT NULL,
+Name   		Char (25)        NOT NULL,
+Description	Char (100)       NULL,
+Type		Char (25)        NULL,
+Purpose		Char (20)        NULL,
+CONSTRAINT TechnologyPK      PRIMARY KEY (TechID),
+);
+
+/*Insert records into TECHNOLOGY */
+
+INSERT INTO TECHNOLOGY (TechID, Name, Description, Type, Purpose)
+ 
+VALUES (100, 'Banking language','Language required for banking','Software','Language'); 
+
+INSERT INTO TECHNOLOGY (TechID, Name, Description, Type, Purpose)
+VALUES (101, 'ATM language', 'Language required for ATM banking','Software','Language');
+
+INSERT INTO TECHNOLOGY (TechID, Name, Description, Type, Purpose)
+ 
+VALUES (102, 'GLoop', 'Hardware for counting machine', 'Hardware', 'Counting');
+
+INSERT INTO TECHNOLOGY (TechID, Name, Description, Type, Purpose)
+ 
+VALUES (103, 'RAM', 'Virtual hardware for banking system', 'Hardware', 'Cache');
+
+/* Create VENDOR*/
+
+CREATE TABLE VENDOR (
+VendorID   	 Int             NOT NULL,
+Name  		 Char(25)        NOT NULL,
+Address 	 Char(50)        NULL,
+Email  		 Char(25)        NULL,
+Phone 		 Char(10)        NOT NULL,
+CONSTRAINT VendorPK           PRIMARY KEY (VendorID),
+);
+
+/*Insert records into VENDOR */
+
+INSERT INTO VENDOR (VendorID, Name, Address, Email, Phone) VALUES (1001, 'Jake', '201 M street', 'qwerty@gmail.com', '12232444')
+INSERT INTO VENDOR (VendorID, Name, Address, Email, Phone) VALUES (1002, 'Robert', 'E Valley Road', 'abcdef@gmail.com', '1223432444')
+INSERT INTO VENDOR (VendorID, Name, Address, Email, Phone) VALUES (1003, 'Kate', '1837 Ave apartment', 'kate@gmail.com', '284734878')
+INSERT INTO VENDOR (VendorID, Name, Address, Email, Phone) VALUES (1004, 'Hollard', '83476 Flag junction apt', 'hollard@yahoo.com', '7458736532')
+
+
+/* Create ACCOUNT*/
+
+CREATE TABLE ACCOUNT (
+AccountType		Char (15)       NOT NULL,
+Description		Char (100)     NULL,
+MinBalanceReq		Int	        NOT NULL,
+MaxBalancePermitted	Int            NOT NULL,
+CONSTRAINT AccountPK         PRIMARY KEY (AccountType),
+);
+
+/*Insert records into ACCOUNT */ 
+
+INSERT INTO ACCOUNT (AccountType, Description, MinBalanceReq, MaxBalancePermitted) VALUES ('Savings', 'Need to have minimun balance in account', 1500, 1000000)
+INSERT INTO ACCOUNT (AccountType, Description, MinBalanceReq, MaxBalancePermitted) VALUES ('Checking', 'No minimum balance in account', 0, 1000000)
+INSERT INTO ACCOUNT (AccountType, Description, MinBalanceReq, MaxBalancePermitted) VALUES ('Credit card', 'Limit required to maintaion account', 5000, 10000)
+INSERT INTO ACCOUNT (AccountType, Description, MinBalanceReq, MaxBalancePermitted) VALUES ('Mortgage', 'interest calculated based on the amount', 0, 100000)
+
+
+/* Create VENDOR_QUOTE*/
+
+CREATE TABLE VENDOR_QUOTE (
+VendorTechID	Int		NOT NULL,
+VendorID	Int		NOT NULL,
+TechID		Int		NOT NULL,
+Specification	Char(50)	NULL,
+PriceQuote	Int		NOT NULL,
+Date		Char(10)	NULL,
+CONSTRAINT VendorQuotePK    PRIMARY KEY (VendorTechID),
+CONSTRAINT VendorTechFK  FOREIGN KEY (VendorID)
+                         REFERENCES VENDOR(VendorID)
+					     ON UPDATE CASCADE
+					     ON DELETE NO ACTION,
+CONSTRAINT TechVendorFK  FOREIGN KEY (TechID)
+                         REFERENCES TECHNOLOGY(TechID)
+					     ON UPDATE CASCADE
+					     ON DELETE NO ACTION,
+
+);
+
+/*Insert records into VENDOR_QUOTE */ 
+
+INSERT INTO VENDOR_QUOTE (VendorTechID, VendorID, TechID, Specification, PriceQuote, Date) VALUES (201, 1001, 100, 'Hardware quantity', 200, '6/18/2018')
+INSERT INTO VENDOR_QUOTE(VendorTechID, VendorID, TechID, Specification, PriceQuote, Date) VALUES (202, 1002, 102, 'Software quantity', 100, '7/11/2019')
+INSERT INTO VENDOR_QUOTE (VendorTechID, VendorID, TechID, Specification, PriceQuote, Date) VALUES (203, 1001, 103, 'QLoop requirement', 300, '4/17/2017')
+INSERT INTO VENDOR_QUOTE (VendorTechID, VendorID, TechID, Specification, PriceQuote, Date) VALUES (204, 1003, 101, 'Counting requirement', 500, '05/19/2016')
+
+
+/* Create BRANCH, EMPLOYEE without any FK definitions */
+
+
+CREATE TABLE BRANCH (
+BranchID	Int		NOT NULL,
+Address		Char (50)	NULL,
+PhoneNumber	Char(10)	NOT NULL,
+Description	Char (100)	NULL,
+OpenDate	Char(10)	NOT NULL,
+ManagerID	Int		NULL
+CONSTRAINT BranchPK      PRIMARY KEY (BranchID),
+);
+
+CREATE TABLE EMPLOYEE (
+EmployeeID	Int         	NOT NULL,
+FirstName	Char (25)   	NOT NULL,
+LastName	Char (25)   	NULL,
+HireDate	Char(10)	NULL,
+Salary		Int	        NULL,
+BranchID	Int	        NOT NULL,
+CONSTRAINT EmployeePK	PRIMARY KEY (EmployeeID),
+CONSTRAINT BranchFK	FOREIGN KEY (BranchID)
+					REFERENCES BRANCH(BranchID)
+					ON UPDATE CASCADE
+					ON DELETE NO ACTION,
+);
+
+
+
+
+/* Create the relationships by adding the FK definitions */ 
+
+ALTER TABLE BRANCH ADD CONSTRAINT ManagerIDFK	FOREIGN KEY (ManagerID)
+						REFERENCES EMPLOYEE(EmployeeID)
+								ON UPDATE NO ACTION
+								ON DELETE NO ACTION
+
+/*Insert records into BRANCH */
+
+INSERT INTO BRANCH (BranchID, Address, PhoneNumber, Description, OpenDate) VALUES (11, '333 Fred street corner, jakeville', 2837387433, 'Branch provides good service', '5/23/2014')
+INSERT INTO BRANCH (BranchID, Address, PhoneNumber, Description, OpenDate) VALUES (12, '564 2nd floor TNagar', 4347838374, 'Customers are always welcomed for interest', '8/14/2019')
+INSERT INTO BRANCH (BranchID, Address, PhoneNumber, Description, OpenDate) VALUES (13, '7 Upstreet, block D', 8193459823, 'we would like to help for all services', '7/22/2012')
+INSERT INTO BRANCH (BranchID, Address, PhoneNumber, Description, OpenDate) VALUES (14, '6D downtown, Georgia', 4198742367, 'Credit is approved instantly', '11/20/2011')
+
+/*Insert records into EMPLOYEE */
+
+INSERT INTO EMPLOYEE (EmployeeID, FirstName, LastName, HireDate, Salary, BranchID) VALUES (1, 'Uran', 'Kate', '11/13/2009', 28733, 11)
+INSERT INTO EMPLOYEE (EmployeeID, FirstName, LastName, HireDate, Salary, BranchID) VALUES (2, 'Jille', 'James', '9/5/2017', 92487, 13)
+INSERT INTO EMPLOYEE (EmployeeID, FirstName, LastName, HireDate, Salary, BranchID) VALUES (3, 'Finlet', 'Jordan', '07/26/2014', 28739 14)
+INSERT INTO EMPLOYEE (EmployeeID, FirstName, LastName, HireDate, Salary, BranchID) VALUES (4, 'kia', 'Lee', '8/25/2018', 82746, 12) 
+
+/*Update BRANCH to add value of ManagerID */
+
+UPDATE BRANCH SET ManagerID = 2 WHERE BranchID = '11';
+UPDATE BRANCH SET ManagerID = 1 WHERE BranchID = '12';
+UPDATE BRANCH SET ManagerID = 3 WHERE BranchID = '13';
+UPDATE BRANCH SET ManagerID = 2 WHERE BranchID = '14';
+
+ALTER TABLE BRANCH ALTER COLUMN ManagerID Int NOT NULL;
+
+
+/* Create OFFICE_ROOMS*/
+
+CREATE TABLE OFFICE_ROOMS (
+RoomID		Int           	NOT NULL,
+Size		Char (25)     	NULL,
+Capacity	Int	      	NULL,
+SmartRoom	Char (25)     	NULL,
+BranchID	Int		NOT NULL,
+CONSTRAINT OfficeRoomsPK      PRIMARY KEY (RoomID),
+CONSTRAINT BranchOfficeFK FOREIGN KEY (BranchID)
+						REFERENCES BRANCH(BranchID)
+						ON UPDATE CASCADE
+						ON DELETE NO ACTION,
+
+);
+
+/*Insert records into OFFICE_ROOMS */
+
+INSERT INTO OFFICE_ROOMS (RoomID, Size, Capacity, SmartRoom, BranchID) VALUES (300, '2743 sqft', 53, 'Contains smart things', 13)
+INSERT INTO OFFICE_ROOMS (RoomID, Size, Capacity, SmartRoom, BranchID) VALUES (301, '2832 sqft', 25, 'Presentation poom has Televison and smart work', 12)
+INSERT INTO OFFICE_ROOMS (RoomID, Size, Capacity, SmartRoom, BranchID) VALUES (302, '2738 sqft', 4, 'Projector room with lim capacity', 13)
+INSERT INTO OFFICE_ROOMS (RoomID, Size, Capacity, SmartRoom, BranchID) VALUES (304, '2847 sqft', 13, 'Discussion room with smart lights technology', 11)
+
+/* Create DEPENDANT*/
+
+CREATE TABLE DEPENDANT (
+DependantID	Int		NOT NULL,
+FirstName	Char (25)	NOT NULL,
+LastName 	Char (25)	NOT NULL,
+Address		Char (50)	NULL,
+Relation	Char (25)	NULL,
+EmployeeID	Int		NOT NULL,
+CONSTRAINT DependantPK      PRIMARY KEY (DependantID),
+CONSTRAINT EmployeeDeptFK	   FOREIGN KEY	(EmployeeID)
+						REFERENCES EMPLOYEE(EmployeeID)
+						ON UPDATE NO ACTION
+						ON DELETE NO ACTION,
+);
+
+/*Insert records into DEPENDANT */
+
+INSERT INTO DEPENDANT (DependantID, FirstName, LastName, Address, Relation, EmployeeID) VALUES (500, 'Hiraj', 'Joe', '666 gill wape', 'Mother', 2)
+INSERT INTO DEPENDANT (DependantID, FirstName, LastName, Address, Relation, EmployeeID) VALUES (501, 'Hill', 'Will', '873 Reed street', 'Father', 1)
+INSERT INTO DEPENDANT (DependantID, FirstName, LastName, Address, Relation, EmployeeID) VALUES (502, 'Tope', 'Grape', '7 hill road', 'Daughter', 3)
+INSERT INTO DEPENDANT (DependantID, FirstName, LastName, Address, Relation, EmployeeID) VALUES (503, 'Uril', 'Lia', '4D Hiro Gillas', 'son', 4)
+
+
+/* Create CUSTOMER*/
+
+CREATE TABLE CUSTOMER (
+CustomerID	Int             NOT NULL,
+FirstName	Char (25)       NOT NULL,
+LastName	Char (25)       NOT NULL,
+Address		Char (50)       NULL,
+Email		Char (25)       NULL,
+DOB		Char(10)	NULL,
+AdvisorID	Int		NULL,
+CONSTRAINT CustomerPK	PRIMARY KEY (CustomerID),
+CONSTRAINT AdvisorCustFK	FOREIGN KEY (AdvisorID)
+					REFERENCES EMPLOYEE(EmployeeID)
+					ON UPDATE NO ACTION
+					ON DELETE NO ACTION,
+);
+
+
+/*Insert records into CUSTOMER */
+
+INSERT INTO CUSTOMER (CustomerID, FirstName, LastName, Address, Email, DOB, AdvisorID) VALUES (800, 'Ullah', 'Gigar', '543 hiarna jillar', 'gigar@gmail.com', '11/13/1986', 3)
+INSERT INTO CUSTOMER (CustomerID, FirstName, LastName, Address, Email, DOB, AdvisorID) VALUES (801, 'Jone', 'Walk', '888 yulu street', 'walk@gmail.com', '07/12/1975', 2)
+INSERT INTO CUSTOMER (CustomerID, FirstName, LastName, Address, Email, DOB, AdvisorID) VALUES (802, 'Fillar', 'Kirf', '54 Jonwill ave', 'kirf@gmail.com', '1/13/1987', 4)
+INSERT INTO CUSTOMER (CustomerID, FirstName, LastName, Address, Email, DOB, AdvisorID) VALUES (803, 'Surio', 'Peterie', '1 D Hamrst street', 'peterie@gmail.com', '3/19/1980', 1)
+
+/* Create BILL*/
+
+CREATE TABLE BILL (
+BillID		Int           	NOT NULL,
+ServiceDesc	Char (50)     	NULL,
+Amount		Int	      	NOT NULL,
+Date		Char(10)      	NOT NULL,
+CustomerID	Int		NOT NULL,
+CONSTRAINT BillPK	PRIMARY KEY (BillID),
+CONSTRAINT CustomerbillFK  FOREIGN KEY (CustomerID)
+                       REFERENCES CUSTOMER (CustomerID)
+					   ON UPDATE NO ACTION
+					   ON DELETE NO ACTION,
+);
+
+/*Insert records into BILL */
+
+INSERT INTO BILL (BillID, ServiceDesc, Amount, Date, CustomerID) VALUES (1000, 'Services purchased by customer', 24556, '12/22/2008', 801)
+INSERT INTO BILL (BillID, ServiceDesc, Amount, Date, CustomerID) VALUES (1001, 'Falcon service provided', 623455, '9/11/2012', 802)
+INSERT INTO BILL (BillID, ServiceDesc, Amount, Date, CustomerID) VALUES (1002, 'Advisor allocated employee', 424547, '6/23/2017', 801)
+INSERT INTO BILL (BillID, ServiceDesc, Amount, Date, CustomerID) VALUES (1003, 'cash service', 2245245, '7/13/2015', 800)
+
+/* Create CUST_ACCOUNT */
+
+CREATE TABLE CUST_ACCOUNT (
+AccountID		Int           	NOT NULL,
+CustomerID	 	Int	      	NOT NULL,
+AccountType	 	Char(15)      	NOT NULL,
+IndividualOrJoint    	Char(25)      	NULL,
+CurrentBalance	  	Int	   	NOT NULL,
+CONSTRAINT AccountCusPK   PRIMARY KEY (AccountID),
+CONSTRAINT CustomerAccFK  FOREIGN KEY (CustomerID)
+                          REFERENCES CUSTOMER(CustomerID)
+					      ON UPDATE NO ACTION
+					      ON DELETE NO ACTION,
+CONSTRAINT AccountTypeFK  FOREIGN KEY (AccountType)
+                          REFERENCES ACCOUNT(AccountType)
+					      ON UPDATE NO ACTION
+					      ON DELETE NO ACTION,
+
+);
+
+/*Insert records into CUST_ACCOUNT */
+
+INSERT INTO CUST_ACCOUNT (AccountID, CustomerID, AccountType, IndividualOrJoint, CurrentBalance) VALUES (2000, 801, 'Savings', 'Joint', 4000)
+INSERT INTO CUST_ACCOUNT (AccountID, CustomerID, AccountType, IndividualOrJoint, CurrentBalance) VALUES (2001, 800, 'Checking', 'Individual', 50000)
+INSERT INTO CUST_ACCOUNT (AccountID, CustomerID, AccountType, IndividualOrJoint, CurrentBalance) VALUES (2002, 802, 'Credit card', 'Joint', 70000)
+INSERT INTO CUST_ACCOUNT (AccountID, CustomerID, AccountType, IndividualOrJoint, CurrentBalance) VALUES (2003, 803, 'Mortgage', 'Individual', 2000)
+
+/* Create OFFICE_ASSIGNMENT*/
+
+CREATE TABLE OFFICE_ASSIGNMENT (
+RoomAssignmentID   	Int         NOT NULL,
+RoomID	 		Int	    NOT NULL,
+EmployeeID	 	Int         NOT NULL,
+DateOccupied 	   	Char(10)    NULL,
+PhoneNumber	  	Char(10)    NULL,
+CONSTRAINT RoomAssignmentPK    PRIMARY KEY (RoomAssignmentID),
+CONSTRAINT RoomOfficeFK  FOREIGN KEY (RoomID)
+                       		REFERENCES OFFICE_ROOMS(RoomID)
+				         ON UPDATE CASCADE
+				         ON DELETE NO ACTION,
+CONSTRAINT EmployeeOfficeFK  FOREIGN KEY (EmployeeID)
+                             	REFERENCES EMPLOYEE(EmployeeID)
+					 ON UPDATE NO ACTION
+					 ON DELETE NO ACTION,
+
+);
+
+/*Insert records into OFFICE_ASSIGNMENT */
+
+INSERT INTO OFFICE_ASSIGNMENT (RoomAssignmentID, RoomID, EmployeeID, DateOccupied, PhoneNumber) VALUES (1500, 301, 2, '5/25/2008', 4193292840)
+INSERT INTO OFFICE_ASSIGNMENT (RoomAssignmentID, RoomID, EmployeeID, DateOccupied, PhoneNumber) VALUES (1501, 304, 1, '3/11/2018', 4578638599)
+INSERT INTO OFFICE_ASSIGNMENT (RoomAssignmentID, RoomID, EmployeeID, DateOccupied, PhoneNumber) VALUES (1502, 301, 1, '2/28/2002', 2487634879)
+INSERT INTO OFFICE_ASSIGNMENT (RoomAssignmentID, RoomID, EmployeeID, DateOccupied, PhoneNumber) VALUES (1503, 300, 3, '9/29/2001', 2487638749)
+
+/* Create PURCHASE*/
+
+CREATE TABLE PURCHASE (
+PurchaseID	 Int              NOT NULL,
+VendorTechID	 Int	          NOT NULL,
+BranchID	 Int        	  NOT NULL,
+Purchaseprice	 Int		  NOT NULL,
+InvoiceNo	 Char(25)         Null, 
+Date		 Char(10)         NULL,
+CONSTRAINT PurchasePK    PRIMARY KEY (PurchaseID),
+CONSTRAINT VendorPurchaseFK  FOREIGN KEY (VendorTechID)
+							 REFERENCES VENDOR_QUOTE(VendorTechID)
+							 ON UPDATE CASCADE
+					         	 ON DELETE NO ACTION,
+CONSTRAINT BranchPurchaseFK  FOREIGN KEY (BranchID)
+							 REFERENCES Branch(BranchID)
+					         	 ON UPDATE CASCADE
+					         	 ON DELETE NO ACTION,
+
+);
+
+/*Insert records into PURCHASE */
+
+INSERT INTO PURCHASE (PurchaseID, VendorTechID, BranchID, PurchasePrice, InvoiceNo, Date) VALUES (2300, 201, 13, 387498, 'T7349', '11/3/2011')
+INSERT INTO PURCHASE (PurchaseID, VendorTechID, BranchID, PurchasePrice, InvoiceNo, Date) VALUES (2301, 203, 11, 23487, 'D9344', '1/18/2009')
+INSERT INTO PURCHASE (PurchaseID, VendorTechID, BranchID, PurchasePrice, InvoiceNo, Date) VALUES (2302, 201, 14, 283783, 'S3895', '8/13/2007')
+INSERT INTO PURCHASE (PurchaseID, VendorTechID, BranchID, PurchasePrice, InvoiceNo, Date) VALUES (2303, 204, 11, 283479, 'R3844', '5/26/2016')
+
+
+

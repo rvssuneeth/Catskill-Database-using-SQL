@@ -1,0 +1,311 @@
+/* Start of Code */
+
+
+/* Create PROFESSOR, DEPARTMENT, SCHOOL without any FK definitions */
+
+CREATE TABLE PROFESSOR (
+	ProfID		Int			NOT NULL,
+	ProfName	Char (25)		NOT NULL,
+	ProfAddr	Char (50)		NULL,
+	ProfRank	Char (25)		NULL,
+	ProfDegree	Char (20)		NULL,
+	ProfEmail	Char (25)		NOT NULL, 
+	DeptCode	Char (3)		NOT NULL,
+	CONSTRAINT	ProfessorPK		PRIMARY KEY (ProfID),
+);
+
+CREATE TABLE DEPARTMENT (
+	DeptCode	Char (3)		NOT NULL, 
+	DeptName	Char (25)		NOT NULL,
+	DeptAddress	Char (50)		NULL,
+	DeptChair	Int			NULL,
+	SchoolCode	Char (3)		NOT NULL,
+	CONSTRAINT	DepartmentPK		PRIMARY KEY (DeptCode),
+);
+
+CREATE TABLE SCHOOL (
+	SchoolCode	Char (3)		NOT NULL,
+	SchoolName	Char (25)		NOT NULL,
+	SchoolAddress	Char (50)		NULL,
+	SchoolDean	Int			NULL,
+	CONSTRAINT	SchoolPK		PRIMARY KEY (SchoolCode),
+);
+
+
+
+/* Create the relationships by adding the FK definitions */ 
+
+ALTER TABLE	PROFESSOR ADD CONSTRAINT DeptProfFK	FOREIGN KEY (DeptCode)
+								REFERENCES DEPARTMENT (DeptCode)
+								ON UPDATE CASCADE
+								ON DELETE NO ACTION 
+;
+
+ALTER TABLE DEPARTMENT ADD CONSTRAINT SchoolDeptFK	FOREIGN KEY (SchoolCode)
+	 							REFERENCES SCHOOL (SchoolCode)
+								ON UPDATE CASCADE
+								ON DELETE NO ACTION     
+;
+
+ALTER TABLE DEPARTMENT ADD CONSTRAINT ProfDeptFK FOREIGN KEY (DeptChair)
+	 							REFERENCES PROFESSOR (ProfID)
+								ON UPDATE NO ACTION
+								ON DELETE NO ACTION
+;
+
+ALTER TABLE SCHOOL ADD CONSTRAINT ProfSchoolFK	FOREIGN KEY (SchoolDean)
+								REFERENCES PROFESSOR (ProfID)
+								ON UPDATE NO ACTION
+								ON DELETE NO ACTION
+;
+
+/*Insert records into SCHOOL – note that we do not insert values for SchoolDean*/
+
+INSERT INTO SCHOOL (SchoolCode, SchoolName, SchoolAddress)
+			VALUES ('ENG', 'School of Engineering', 'Faraday Hall');  
+INSERT INTO SCHOOL (SchoolCode, SchoolName, SchoolAddress)
+			VALUES ('BUS', 'School of Business', 'Cremer Hall'); 
+INSERT INTO SCHOOL (SchoolCode, SchoolName, SchoolAddress)
+			VALUES ('SCI', 'School of Science', 'Einstein Hall');  
+INSERT INTO SCHOOL (SchoolCode, SchoolName, SchoolAddress)
+			VALUES ('ART', 'School of Arts', 'Picasso Hall'); 
+INSERT INTO SCHOOL (SchoolCode, SchoolName, SchoolAddress)
+			VALUES ('EDU', 'School of Education', 'Ross Hall'); 
+
+/*Insert records into DEPARTMENT – note that we do not insert values for DeptChair */
+
+INSERT INTO DEPARTMENT (DeptCode, DeptName, DeptAddress, SchoolCode)
+			VALUES ('MIS', 'Mgmt. Information Systems', '102 Cremer', 'BUS'); 
+INSERT INTO DEPARTMENT (DeptCode, DeptName, DeptAddress, SchoolCode)
+			VALUES ('CIS', 'Comp. Information Systems', '108 Cremer', 'BUS');
+INSERT INTO DEPARTMENT (DeptCode, DeptName, DeptAddress, SchoolCode)
+			VALUES ('ACC', 'Accounting', '109 Cremer', 'BUS'); 
+INSERT INTO DEPARTMENT (DeptCode, DeptName, DeptAddress, SchoolCode)
+			VALUES ('FIN', 'Finance', '220 Cremer', 'BUS');  
+INSERT INTO DEPARTMENT (DeptCode, DeptName, DeptAddress, SchoolCode)
+			VALUES ('MKT', 'Marketing', '102 Cremer', 'BUS');
+INSERT INTO DEPARTMENT (DeptCode, DeptName, DeptAddress, SchoolCode)
+			VALUES ('MGT', 'Management', '228 Cremer', 'BUS');
+INSERT INTO DEPARTMENT (DeptCode, DeptName, DeptAddress, SchoolCode)
+			VALUES ('EEE', 'Electrical & Electronics', '340 Faraday', 'ENG'); 
+INSERT INTO DEPARTMENT (DeptCode, DeptName, DeptAddress, SchoolCode)
+			VALUES ('CSE', 'Computer Engineering', '600 Faraday', 'ENG');
+INSERT INTO DEPARTMENT (DeptCode, DeptName, DeptAddress, SchoolCode)
+			VALUES ('MEC', 'Mechanical Engineering', '720 Faraday', 'ENG'); 
+INSERT INTO DEPARTMENT (DeptCode, DeptName, DeptAddress, SchoolCode)
+			VALUES ('CIV', 'Civil Engineering', '100 Faraday', 'ENG');
+INSERT INTO DEPARTMENT (DeptCode, DeptName, DeptAddress, SchoolCode)
+			VALUES ('PHY', 'Physics', '300 Einstein', 'SCI');
+INSERT INTO DEPARTMENT (DeptCode, DeptName, DeptAddress, SchoolCode)
+			VALUES ('CHE', 'Chemistry', '450 Einstein', 'SCI');
+INSERT INTO DEPARTMENT (DeptCode, DeptName, DeptAddress, SchoolCode)
+			VALUES ('BOT', 'Botany', '230 Einstein', 'SCI');
+INSERT INTO DEPARTMENT (DeptCode, DeptName, DeptAddress, SchoolCode)
+			VALUES ('ZOO', 'Zoology', '450 Einstein', 'SCI');
+
+
+/*Insert records into PROFESSOR*/
+
+INSERT INTO PROFESSOR (ProfID, ProfName, ProfAddr, ProfRank, ProfDegree, ProfEmail, DeptCode)
+			VALUES (272, 'Sasidharan', '108A Cremer', 'Assistant', 'PhD', 'sasi@catskill.edu', 'CIS');
+INSERT INTO PROFESSOR (ProfID, ProfName, ProfAddr, ProfRank, ProfDegree, ProfEmail, DeptCode)
+			VALUES (500, 'James', '108B Cremer', 'Assistant', 'PhD', 'james@catskill.edu', 'CIS');
+INSERT INTO PROFESSOR (ProfID, ProfName, ProfAddr, ProfRank, ProfDegree, ProfEmail, DeptCode)
+			VALUES (330, 'Freeze', '102A Cremer', 'Assistant', 'PhD', 'freeze@catskill.edu', 'MIS');
+INSERT INTO PROFESSOR (ProfID, ProfName, ProfAddr, ProfRank, ProfDegree, ProfEmail, DeptCode)
+			VALUES (134, 'Bradley', '102C Cremer', 'Associate', 'PhD', 'brad@catskill.edu', 'MIS');
+INSERT INTO PROFESSOR (ProfID, ProfName, ProfAddr, ProfRank, ProfDegree, ProfEmail, DeptCode)
+			VALUES (172, 'Shao', '108F Cremer', 'Professor', 'PhD', 'shao@catskill.edu', 'CIS');
+INSERT INTO PROFESSOR (ProfID, ProfName, ProfAddr, ProfRank, ProfDegree, ProfEmail, DeptCode)
+			VALUES (690, 'Tomblin', '109A Cremer', 'Associate', 'PhD', 'tomblin@catskill.edu', 'ACC');
+INSERT INTO PROFESSOR (ProfID, ProfName, ProfAddr, ProfRank, ProfDegree, ProfEmail, DeptCode)
+			VALUES (140, 'Braun', '109C Cremer', 'Professor', 'PhD', 'braun@catskill.edu', 'ACC');
+INSERT INTO PROFESSOR (ProfID, ProfName, ProfAddr, ProfRank, ProfDegree, ProfEmail, DeptCode)
+			VALUES (970, 'Andrews', '220A Cremer', 'Professor', 'PhD', 'andrews@catskill.edu', 'FIN');
+INSERT INTO PROFESSOR (ProfID, ProfName, ProfAddr, ProfRank, ProfDegree, ProfEmail, DeptCode)
+			VALUES (700, 'Jenkins', '220K Cremer', 'Assistant', 'PhD', 'jenkins@catskill.edu', 'FIN');
+INSERT INTO PROFESSOR (ProfID, ProfName, ProfAddr, ProfRank, ProfDegree, ProfEmail, DeptCode)
+			VALUES (237, 'McClure', '100R Faraday', 'Associate', 'PhD', 'mcclure@catskill.edu', 'CIV');
+INSERT INTO PROFESSOR (ProfID, ProfName, ProfAddr, ProfRank, ProfDegree, ProfEmail, DeptCode)
+			VALUES (750, 'Hensley', '340X Faraday', 'Professor', 'PhD', 'hensley@catskill.edu', 'EEE');
+INSERT INTO PROFESSOR (ProfID, ProfName, ProfAddr, ProfRank, ProfDegree, ProfEmail, DeptCode)
+			VALUES (720, 'Gillian', '340U Faraday', 'Professor', 'PhD', 'gillian@catskill.edu', 'EEE');
+
+
+/*Update SCHOOL to add value of SchoolDean */
+
+UPDATE SCHOOL SET SchoolDean = 172 WHERE SchoolCode = 'BUS';
+UPDATE SCHOOL SET SchoolDean = 750 WHERE SchoolCode = 'ENG'; 
+
+/*Update DEPARTMENT to add value of DeptChair */
+
+UPDATE DEPARTMENT SET DeptChair = 134 WHERE DeptCode = 'MIS';
+UPDATE DEPARTMENT SET DeptChair = 500 WHERE DeptCode = 'CIS';
+UPDATE DEPARTMENT SET DeptChair = 690 WHERE DeptCode = 'ACC';
+
+/* Start of Code */
+
+/* Create tables COURSE, STUDENT, CLSECT, ENROLL */
+
+
+CREATE TABLE COURSE (
+	CourseCode		Char (6)		NOT NULL,
+	CourseTitle		Char (25)		NULL,
+	CourseDesc		Char (100)		NULL,
+	CourseCredits		Int			NULL,
+	DeptCode		Char (3)        	NOT NULL,		
+	CONSTRAINT		CoursePK		PRIMARY KEY (CourseCode),
+	CONSTRAINT		DeptCourseFK		FOREIGN KEY (DeptCode)
+								REFERENCES DEPARTMENT (DeptCode)
+								ON UPDATE CASCADE
+								ON DELETE NO ACTION,
+);
+
+CREATE TABLE STUDENT (
+	StuID			Int			NOT NULL,
+	StuName		Char (50)			NOT NULL,
+	StuAddr		Char (100)			NULL,
+	StuMajor	Char (25)			NULL,
+	StuGPA		Int				NULL,
+	DeptCode	Char (3)			NOT NULL,
+	CONSTRAINT	StudentPK			PRIMARY KEY (StuID),
+	CONSTRAINT	DeptStuFK			FOREIGN KEY (DeptCode)
+								REFERENCES DEPARTMENT (DeptCode)
+								ON UPDATE CASCADE
+								ON DELETE NO ACTION,
+);
+
+CREATE TABLE CLSECT (
+	ClassCode	Char (10)			NOT NULL,
+	ClassTime	Char (25)			NULL,
+	ClassSize	Int				NULL,
+	ClassRoom	Char (10)			NULL,
+	CourseCode	Char (6)			NOT NULL,
+    	ProfID		Int				NULL, 
+	CONSTRAINT	ClsectPK			PRIMARY KEY (ClassCode),
+	CONSTRAINT	CourseClsectFK			FOREIGN KEY (CourseCode)
+								REFERENCES COURSE (CourseCode)
+								ON UPDATE CASCADE
+								ON DELETE NO ACTION,
+	CONSTRAINT	ProfClsectFK			FOREIGN KEY (ProfID)
+								REFERENCES PROFESSOR (ProfID)
+								ON UPDATE NO ACTION
+								ON DELETE NO ACTION,
+);
+
+CREATE TABLE ENROLL (
+	StuID		Int				NOT NULL,
+	ClassCode	Char (10)			NOT NULL,
+	EnrollDate	Datetime			NULL,
+	EnrollGrade	Char (1)			NULL,
+	CONSTRAINT	EnrollPK			PRIMARY KEY (StuID, ClassCode),
+	CONSTRAINT	EnrollStudentFK			FOREIGN KEY (StuID)
+								REFERENCES STUDENT (StuID)
+								ON UPDATE NO ACTION
+								ON DELETE NO ACTION,
+	CONSTRAINT	EnrollClsectFK			FOREIGN KEY (ClassCode)
+								REFERENCES CLSECT (ClassCode)
+								ON UPDATE CASCADE
+								ON DELETE NO ACTION,
+);	
+
+
+/*Insert records into STUDENT*/
+
+
+INSERT INTO STUDENT (StuID, StuName, DeptCode)
+			VALUES (2314, 'Jones', 'ACC');
+
+INSERT INTO STUDENT (StuID, StuName, DeptCode)
+			VALUES (4356, 'James', 'MIS');
+
+INSERT INTO STUDENT (StuID, StuName, DeptCode)
+			VALUES (2463, 'Herbert', 'CIS');
+
+INSERT INTO STUDENT (StuID, StuName, DeptCode)
+			VALUES (3087, 'Skillet', 'EEE');
+
+INSERT INTO STUDENT (StuID, StuName, DeptCode)
+			VALUES (9907, 'Adams', 'EEE');
+
+INSERT INTO STUDENT (StuID, StuName, DeptCode)
+			VALUES (1109, 'Mason', 'PHY');
+
+INSERT INTO STUDENT (StuID, StuName, DeptCode)
+			VALUES (5578, 'Reggie', 'PHY');
+
+INSERT INTO STUDENT (StuID, StuName, DeptCode)
+			VALUES (2209, 'Jones', 'FIN');
+
+INSERT INTO STUDENT (StuID, StuName, DeptCode)
+			VALUES (6678, 'Dennis', 'FIN');
+
+
+/*Insert records into COURSE*/
+
+
+INSERT INTO COURSE (CourseCode, CourseTitle, CourseCredits, DeptCode)
+			VALUES ('ACC200', 'Intro to Acctg', 3, 'ACC');
+
+INSERT INTO COURSE (CourseCode, CourseTitle, CourseCredits, DeptCode)
+			VALUES ('CIS343', 'Java Prog', 3, 'CIS');
+
+INSERT INTO COURSE (CourseCode, CourseTitle, CourseCredits, DeptCode)
+			VALUES ('CIS393', 'Advanced Java', 3, 'CIS');
+
+INSERT INTO COURSE (CourseCode, CourseTitle, CourseCredits, DeptCode)
+			VALUES ('EEE590', 'Electrical Machines', 3, 'EEE');
+
+INSERT INTO COURSE (CourseCode, CourseTitle, CourseCredits, DeptCode)
+			VALUES ('MIS113', 'Intro. to Comp. Applns', 3, 'MIS'); 
+
+INSERT INTO COURSE (CourseCode, CourseTitle, CourseCredits, DeptCode)
+			VALUES ('MIS413', 'Database Concepts', 3, 'MIS'); 
+
+
+/*Insert records into CLSECT*/
+
+INSERT INTO CLSECT (ClassCode, CourseCode, ProfID)
+			VALUES ('ACC200A', 'ACC200', 140);
+INSERT INTO CLSECT (ClassCode, CourseCode, ProfID)
+			VALUES ('ACC200B', 'ACC200', 140);
+INSERT INTO CLSECT (ClassCode, CourseCode, ProfID)
+			VALUES ('ACC200C', 'ACC200', 140);
+
+INSERT INTO CLSECT (ClassCode, CourseCode, ProfID)
+			VALUES ('CIS343A', 'CIS343', 272);
+INSERT INTO CLSECT (ClassCode, CourseCode, ProfID)
+			VALUES ('CIS343B', 'CIS343', 272);
+INSERT INTO CLSECT (ClassCode, CourseCode, ProfID)
+			VALUES ('CIS343C', 'CIS343', 272);
+
+INSERT INTO CLSECT (ClassCode, CourseCode, ProfID)
+			VALUES ('CIS393A', 'CIS393', 500);
+
+
+INSERT INTO CLSECT (ClassCode, CourseCode, ProfID)
+			VALUES ('EEE590B', 'EEE590', 720);
+INSERT INTO CLSECT (ClassCode, CourseCode, ProfID)
+			VALUES ('EEE590C', 'EEE590', 750);
+
+INSERT INTO CLSECT (ClassCode, CourseCode, ProfID)
+			VALUES ('MIS113A', 'MIS113', 134);
+INSERT INTO CLSECT (ClassCode, CourseCode, ProfID)
+			VALUES ('MIS413B', 'MIS413', 134); 
+
+/*Insert records into ENROLL*/
+
+
+INSERT INTO ENROLL (StuID, ClassCode, EnrollGrade)
+			VALUES (2314, 'CIS343A', 'A');
+INSERT INTO ENROLL (StuID, ClassCode, EnrollGrade)
+			VALUES (6678, 'MIS413B', 'C');
+INSERT INTO ENROLL (StuID, ClassCode, EnrollGrade)
+			VALUES (6678, 'MIS113A', 'A');
+
+
+/*INSERT CODE FOR QUIZ BELOW THIS LINE AND UPLOAD TO CANVAS*/
+
+
+
+
